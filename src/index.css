@@ -1,0 +1,254 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream-canvas: #EFECE4;
+  --color-cream-raised: #F6F3EC;
+  --color-cream-inset: #E3DED2;
+  --color-charcoal-primary: #23272A;
+  --color-charcoal-secondary: #5C6064;
+  --color-teal-accent: #0E5A63;
+
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer base {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #EFECE4;
+    color: #23272A;
+    font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    overscroll-behavior: none;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+/* Soft Tactile Neumorphism — Pencahayaan kiri-atas 135° tanpa border keras */
+.tactile-raised {
+  background-color: #F6F3EC;
+  box-shadow:
+    6px 6px 14px rgba(0, 0, 0, 0.06),
+    -6px -6px 14px rgba(255, 255, 255, 0.85);
+  transition: box-shadow 0.16s ease, transform 0.16s ease, background-color 0.16s ease;
+}
+
+.tactile-raised-lg {
+  background-color: #F6F3EC;
+  box-shadow:
+    10px 10px 24px rgba(0, 0, 0, 0.06),
+    -10px -10px 24px rgba(255, 255, 255, 0.9);
+}
+
+.tactile-raised-interactive:hover {
+  box-shadow:
+    8px 8px 18px rgba(0, 0, 0, 0.075),
+    -8px -8px 18px rgba(255, 255, 255, 0.92);
+}
+
+.tactile-raised-interactive:active {
+  box-shadow:
+    inset 3px 3px 6px rgba(0, 0, 0, 0.05),
+    inset -3px -3px 6px rgba(255, 255, 255, 0.70);
+}
+
+.tactile-inset {
+  background-color: #E3DED2;
+  box-shadow:
+    inset 3px 3px 6px rgba(0, 0, 0, 0.05),
+    inset -3px -3px 6px rgba(255, 255, 255, 0.70);
+}
+
+.tactile-inset-deep {
+  background-color: #E3DED2;
+  box-shadow:
+    inset 4px 4px 10px rgba(0, 0, 0, 0.07),
+    inset -4px -4px 10px rgba(255, 255, 255, 0.75);
+}
+
+.tactile-pill-cta {
+  background-color: #0E5A63;
+  color: #FFFFFF;
+  box-shadow: 4px 4px 12px rgba(14, 90, 99, 0.25);
+  transition: opacity 0.16s ease, box-shadow 0.16s ease, transform 0.12s ease;
+}
+
+.tactile-pill-cta:hover {
+  opacity: 0.94;
+}
+
+.tactile-pill-cta:active {
+  box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.28);
+  transform: scale(0.99);
+}
+
+.font-code {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+.katex {
+  font-size: 1.03em;
+  color: #23272A;
+}
+
+.katex-display {
+  margin: 0.4rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.35rem 0.25rem;
+}
+
+/* Native accessible range slider with Soft Tactile styling */
+input[type="range"].tactile-range {
+  --slider-track-size: 0.625rem;
+  --slider-thumb-size: 1.375rem;
+  --slider-track-radius: 9999px;
+  --slider-thumb-radius: 50%;
+  --slider-track-color: #E3DED2;
+  --slider-fill-color: #0E5A63;
+  --slider-thumb-color: #F6F3EC;
+  --slider-direction: to right;
+  --attr-min: 0;
+  --attr-max: 100;
+  --control-value: 50;
+  --slider-progress: calc(
+    (var(--control-value) - var(--attr-min)) /
+    max(0.0001, (var(--attr-max) - var(--attr-min))) * 100%
+  );
+
+  appearance: none;
+  -webkit-appearance: none;
+  inline-size: 100%;
+  block-size: 2.25rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type="range"].tactile-range:focus-visible {
+  outline: 2px solid #0E5A63;
+  outline-offset: 4px;
+  border-radius: 9999px;
+}
+
+/* WebKit/Blink track & thumb (declared separately from Firefox) */
+input[type="range"].tactile-range::-webkit-slider-runnable-track {
+  block-size: var(--slider-track-size);
+  border: 0;
+  border-radius: var(--slider-track-radius);
+  box-shadow:
+    inset 2px 2px 4px rgba(0, 0, 0, 0.08),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.65);
+  background: linear-gradient(
+    var(--slider-direction),
+    var(--slider-fill-color) var(--slider-progress),
+    var(--slider-track-color) var(--slider-progress)
+  );
+}
+
+input[type="range"].tactile-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  inline-size: var(--slider-thumb-size);
+  block-size: var(--slider-thumb-size);
+  margin-block-start: calc((var(--slider-track-size) - var(--slider-thumb-size)) / 2);
+  border: 3px solid #0E5A63;
+  border-radius: var(--slider-thumb-radius);
+  background: var(--slider-thumb-color);
+  box-shadow:
+    3px 3px 8px rgba(0, 0, 0, 0.12),
+    -2px -2px 6px rgba(255, 255, 255, 0.9);
+}
+
+/* Firefox track, progress & thumb */
+input[type="range"].tactile-range::-moz-range-track {
+  block-size: var(--slider-track-size);
+  border: 0;
+  border-radius: var(--slider-track-radius);
+  background: var(--slider-track-color);
+  box-shadow:
+    inset 2px 2px 4px rgba(0, 0, 0, 0.08),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.65);
+}
+
+input[type="range"].tactile-range::-moz-range-progress {
+  block-size: var(--slider-track-size);
+  border-radius: var(--slider-track-radius);
+  background: var(--slider-fill-color);
+}
+
+input[type="range"].tactile-range::-moz-range-thumb {
+  inline-size: var(--slider-thumb-size);
+  block-size: var(--slider-thumb-size);
+  border: 3px solid #0E5A63;
+  border-radius: var(--slider-thumb-radius);
+  background: var(--slider-thumb-color);
+  box-shadow:
+    3px 3px 8px rgba(0, 0, 0, 0.12),
+    -2px -2px 6px rgba(255, 255, 255, 0.9);
+}
+
+/* Scrollbar hiding for clean lab drawers */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Print-to-PDF A4 Clean Worksheet Stylesheet */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 16mm;
+  }
+
+  html,
+  body {
+    background-color: #ffffff !important;
+    color: #23272A !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .print-clean-card {
+    background: #ffffff !important;
+    box-shadow: none !important;
+    border: 1px solid #E3DED2 !important;
+    border-radius: 12px !important;
+    padding: 16px !important;
+  }
+
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  th,
+  td {
+    border-bottom: 1px solid #E3DED2 !important;
+    padding: 8px 10px !important;
+    color: #23272A !important;
+  }
+}
+
+@media screen {
+  .print-only {
+    display: none;
+  }
+}
