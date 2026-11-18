@@ -110,7 +110,7 @@ export function AnatomyBottomPanel({
             onClick={onOpenAnalysis}
             className="flex cursor-pointer items-center gap-1 font-code text-[11px] font-semibold text-[#0E5A63] hover:underline"
           >
-            <span>Buka Alur Sirkulasi &amp; AI Co-Pilot</span>
+            <span>Buka Alur Sirkulasi &amp; Asisten Cerdas</span>
             <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
           </button>
         </div>

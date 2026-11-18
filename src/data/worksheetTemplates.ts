@@ -12,6 +12,7 @@ import {
 import { calculateInclinedPhysics } from '../engines/physicsInclined';
 import type {
   ComputedModuleResult,
+  ExperimentRecord,
   ModuleExploredItem,
   ModuleId,
   ModuleParamsMap,
@@ -298,5 +299,35 @@ export function buildModuleSummaryFromExplored(
     lines.push(`${idx + 1}. ${item.summaryLine}`);
   });
 
+  return lines.join('\n');
+}
+
+export function buildRecordNarrativeSentence(rec: ExperimentRecord): string {
+  if (rec.narrativeSummary?.trim()) {
+    return rec.narrativeSummary.trim();
+  }
+  const isAnatomy =
+    rec.recordKind === 'anatomy' || rec.moduleId === 'biology-anatomy';
+  if (isAnatomy) {
+    const struktur = rec.anatomyRecord?.identifiedStructures ?? rec.formulaText;
+    const mode = rec.anatomyRecord?.organAndMode ?? rec.inputSummary;
+    const fungsi = rec.anatomyRecord?.physiologicalFunction ?? rec.outputSummary;
+    return `Pada pengamatan ${struktur} (${mode}), diperoleh pemahaman fisiologis bahwa ${fungsi.charAt(0).toLowerCase()}${fungsi.slice(1)}`;
+  }
+  return `Pada pengujian dengan kondisi ${rec.inputSummary}, hasil menunjukkan ${rec.outputSummary} sesuai persamaan ${rec.formulaText}.`;
+}
+
+export function buildModuleSummaryFromRecords(
+  moduleId: ModuleId,
+  records: ExperimentRecord[],
+): string {
+  if (records.length === 0) return '';
+  const cfg = WORKSHEET_CONFIG_BY_MODULE[moduleId];
+  const lines: string[] = [
+    `${cfg.summaryHeaderPrefix} (${records.length} HASIL PRAKTIKUM):`,
+  ];
+  records.forEach((rec, idx) => {
+    lines.push(`${idx + 1}. ${buildRecordNarrativeSentence(rec)}`);
+  });
   return lines.join('\n');
 }

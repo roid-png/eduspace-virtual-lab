@@ -201,6 +201,7 @@ export interface ExperimentRecord {
   primaryNumericValue: number;
   primaryUnit: string;
   formulaText: string;
+  narrativeSummary?: string;
   recordKind?: 'numeric' | 'anatomy';
   anatomyRecord?: AnatomyRecordPayload;
 }

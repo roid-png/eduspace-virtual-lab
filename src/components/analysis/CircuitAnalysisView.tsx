@@ -71,7 +71,7 @@ export function CircuitAnalysisView({
           <span>Lab 3D</span>
           <span className="opacity-40">/</span>
           <span className="font-semibold text-[#0E5A63]">
-            Analisis Rangkaian, Rumus &amp; AI Co-Pilot
+            Analisis Rangkaian, Rumus &amp; Asisten Cerdas
           </span>
         </div>
 
@@ -410,7 +410,7 @@ export function CircuitAnalysisView({
         </section>
       </div>
 
-      {/* AI Co-Pilot Laboratorium Terhubung Penuh ke Konteks Modul Rangkaian Listrik */}
+      {/* Asisten Cerdas Laboratorium Terhubung Penuh ke Konteks Modul Rangkaian Listrik */}
       <CopilotChatPanel
         mod={mod}
         computedResult={computedResult}
@@ -418,8 +418,8 @@ export function CircuitAnalysisView({
         isCopilotLoading={isCopilotLoading}
         hasGeminiKey={hasGeminiKey}
         onSendMessage={onSendMessage}
-        placeholder="Tanya AI Co-Pilot tentang rangkaian campuran, Hukum Ohm, Kirchhoff I & II, efek saklar ON/OFF, atau kecerahan lampu..."
-        className="min-h-[440px] w-full"
+        placeholder="Tanya Asisten Cerdas tentang rangkaian campuran, Hukum Ohm, Kirchhoff I & II, efek saklar ON/OFF, atau kecerahan lampu..."
+        className="min-h-[400px] w-full lg:min-h-[440px]"
       />
     </div>
   );

@@ -13,6 +13,12 @@
 }
 
 @layer base {
+  html {
+    scroll-padding-top: calc(7.5rem + env(safe-area-inset-top, 0px));
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
   html,
   body {
     margin: 0;
@@ -20,11 +26,40 @@
     background-color: #EFECE4;
     color: #23272A;
     font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    line-height: 1.5;
+    overflow-wrap: break-word;
     overscroll-behavior: none;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :where(button, a, [role="button"], [role="radio"], [role="switch"], [role="checkbox"]) {
+    touch-action: manipulation;
   }
 
   * {
     box-sizing: border-box;
+  }
+}
+
+/* Fluid Hero Title (scales cleanly across 320px phones up to desktop) */
+.hero-title-fluid {
+  font-size: clamp(1.55rem, 1.05rem + 2.3vw, 2.85rem);
+  line-height: 1.15;
+}
+
+@media (pointer: coarse) {
+  .touch-target-min {
+    min-block-size: 44px;
+    min-inline-size: 44px;
   }
 }
 
@@ -207,15 +242,26 @@ input[type="range"].tactile-range::-moz-range-thumb {
 @media print {
   @page {
     size: A4 portrait;
-    margin: 16mm;
+    margin: 14mm;
   }
 
   html,
-  body {
+  body,
+  #root,
+  .app-shell {
+    background: #ffffff !important;
     background-color: #ffffff !important;
-    color: #23272A !important;
+    color: #111827 !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+  }
+
+  .app-main {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
   }
 
   .no-print {
@@ -226,24 +272,54 @@ input[type="range"].tactile-range::-moz-range-thumb {
     display: block !important;
   }
 
-  .print-clean-card {
+  .print-table-region {
+    display: block !important;
+    overflow: visible !important;
     background: #ffffff !important;
     box-shadow: none !important;
-    border: 1px solid #E3DED2 !important;
-    border-radius: 12px !important;
-    padding: 16px !important;
+  }
+
+  .print-clean-card {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+  }
+
+  .print-clean-card .tactile-raised,
+  .print-clean-card .tactile-raised-lg,
+  .print-clean-card .tactile-inset,
+  .print-clean-card .tactile-inset-deep {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    box-shadow: none !important;
   }
 
   table {
     width: 100% !important;
     border-collapse: collapse !important;
+    border: 1px solid #d1d5db !important;
+    background: #ffffff !important;
+  }
+
+  thead tr {
+    background-color: #f3f4f6 !important;
+  }
+
+  tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
 
   th,
   td {
-    border-bottom: 1px solid #E3DED2 !important;
+    border: 1px solid #d1d5db !important;
     padding: 8px 10px !important;
-    color: #23272A !important;
+    color: #111827 !important;
+    vertical-align: top !important;
+    background: transparent !important;
   }
 }
 

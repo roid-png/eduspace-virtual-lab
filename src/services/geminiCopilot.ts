@@ -146,7 +146,7 @@ function buildDeterministicFallback(
         'Udara masuk melalui trakea ke percabangan bronkus dan bronkiolus hingga mencapai kantung alveolus. Dinding epitel selapis alveolus yang sangat tipis dan dikelilingi kapiler memungkinkan difusi pasif O₂ masuk ke hemoglobin serta pelepasan CO₂ untuk diekshalasi.';
     } else if (qLower.includes('gangguan') || qLower.includes('kasus') || qLower.includes('penyakit')) {
       topicAnswer =
-        'Contoh studi kasus SMA Kelas XI: (1) Regurgitasi/stenosis katup jantung mengganggu aliran satu arah antar-ruang; (2) Aterosklerosis menyempitkan lumen aorta sehingga beban bilik kiri meningkat; (3) Asma menyempitkan bronkiolus sedangkan emfisema merusak dinding alveolus sehingga luas area difusi O₂ menurun.';
+        'Contoh studi kasus jenjang SMA: (1) Regurgitasi/stenosis katup jantung mengganggu aliran satu arah antar-ruang; (2) Aterosklerosis menyempitkan lumen aorta sehingga beban bilik kiri meningkat; (3) Asma menyempitkan bronkiolus sedangkan emfisema merusak dinding alveolus sehingga luas area difusi O₂ menurun.';
     }
 
     return {
@@ -360,10 +360,10 @@ export async function askCopilot(
   const lightCompare = PLANT_CELL_LIGHT_EFFECTS[ctx.cellParams?.lightCondition ?? 'terang'];
 
   const systemInstruction = isAnatomy && anatomyExp
-    ? `Kamu adalah AI Co-Pilot Laboratorium Virtual EDUSPACE untuk siswa SMA Kelas XI (Kurikulum Merdeka) dalam bahasa Indonesia.
+    ? `Kamu adalah Asisten Cerdas Laboratorium Virtual EDUSPACE untuk siswa Sekolah Menengah Atas (Kurikulum Merdeka) dalam bahasa Indonesia.
 Fokus utama modul Biologi Anatomi Organ adalah EKSPLORASI STRUKTUR ANATOMI DALAM, PEMISAHAN ORGAN, PEMBELAHAN PENAMPANG, DAN FUNGSI FISIOLOGIS (bukan sekadar hitungan rumus curah jantung).
 Aturan jawaban:
-1. Jawab PERTANYAAN SISWA secara akurat dan spesifik mengenai struktur internal organ (4 ruang & katup jantung, septum, percabangan bronkus & alveolus paru, lumen aorta & vena kava), mekanisme kerjanya, alur sirkulasi (${flowSummary}), atau studi kasus gangguan kardiorespirasi SMA Kelas XI.
+1. Jawab PERTANYAAN SISWA secara akurat dan spesifik mengenai struktur internal organ (4 ruang & katup jantung, septum, percabangan bronkus & alveolus paru, lumen aorta & vena kava), mekanisme kerjanya, alur sirkulasi (${flowSummary}), atau studi kasus gangguan kardiorespirasi jenjang SMA.
 2. Jelaskan secara ringkas, ilmiah, dan terstruktur (3–5 kalimat) dengan mengaitkan organ/struktur yang sedang diamati siswa saat ini bila relevan.
 3. Jangan gunakan materi SD/SMP atau mengulang hitungan CO = HR × SV kecuali siswa menanyakannya secara khusus sebagai data pelengkap.
 
@@ -376,7 +376,7 @@ KONTEKS EKSPLORASI ANATOMI SAAT INI:
 - Langkah Guided Task Aktif: Langkah ${ctx.guidedStep}/4 (${stepInfo?.shortLabel ?? ''}) — ${stepInfo?.instruction ?? ''}
 - Jumlah Observasi Tercatat di Lembar Kerja: ${ctx.recordedCount}`
     : isPlantCell && cellObs
-      ? `Kamu adalah AI Co-Pilot Laboratorium Virtual EDUSPACE khusus modul Biologi Sel Tumbuhan untuk siswa SMA Kelas XI (Kurikulum Merdeka) dalam bahasa Indonesia.
+      ? `Kamu adalah Asisten Cerdas Laboratorium Virtual EDUSPACE khusus modul Biologi Sel Tumbuhan untuk siswa Sekolah Menengah Atas (Kurikulum Merdeka) dalam bahasa Indonesia.
 ATURAN PENTING:
 1. Modul ini HANYA membahas SEL TUMBUHAN (TIDAK ADA sel darah/eritrosit/leukosit) dan TIDAK memakai perhitungan mikroskop (JANGAN membahas FOV, SA/V, perbesaran lensa, atau rumus matematika).
 2. Jawab PERTANYAAN SISWA secara langsung, akurat, dan spesifik mengenai bagian sel tumbuhan mana pun (Nukleus, Kloroplas, Vakuola Sentral, Mitokondria, RE Kasar/Halus, Badan Golgi, Ribosom, Lisosom, Peroksisom, Plasmodesmata, Dinding & Membran Sel, Sitoplasma) serta efek terkena cahaya vs gelap.
@@ -391,7 +391,7 @@ KONTEKS PENGAMATAN SEL TUMBUHAN SAAT INI:
 - Langkah Guided Task Aktif: Langkah ${ctx.guidedStep}/4 (${stepInfo?.shortLabel ?? ''}) — ${stepInfo?.instruction ?? ''}
 - Jumlah Observasi Tercatat: ${ctx.recordedCount}`
     : ctx.moduleId === 'math-geometry3d' && ctx.geometryParams
-      ? `Kamu adalah AI Co-Pilot Laboratorium Virtual EDUSPACE untuk Matematika SMA Kelas XI Kurikulum Merdeka (Transformasi Geometri & Lingkaran).
+      ? `Kamu adalah Asisten Cerdas Laboratorium Virtual EDUSPACE untuk Matematika Sekolah Menengah Atas Kurikulum Merdeka (Transformasi Geometri & Lingkaran).
 ATURAN PENTING:
 1. Fokus modul ini adalah TRANSFORMASI GEOMETRI (Translasi, Refleksi, Rotasi, Dilatasi dengan matriks 2×2 dan luas bayangan |det(M)|×L) serta LINGKARAN (Panjang Busur, Luas Juring, Sudut Pusat vs Sudut Keliling θ/2, Tali Busur, dan Garis Singgung tegak lurus jari-jari 90°). JANGAN membahas kubus dimensi tiga BDG/ABCD.EFGH.
 2. Jawab pertanyaan siswa secara ringkas, jelas, dan ilmiah merujuk pada parameter aktif di bawah ini.
@@ -403,11 +403,11 @@ KONTEKS GEOMETRI AKTIF SAAT INI:
 - Ringkasan Output: ${ctx.computed.summaryOutputText}
 - Langkah Guided Task Aktif: Langkah ${ctx.guidedStep}/4 (${stepInfo?.shortLabel ?? ''})
 - Jumlah Data Tercatat: ${ctx.recordedCount}`
-      : `Kamu adalah AI Co-Pilot Laboratorium Virtual EDUSPACE untuk siswa SMA Kelas XI (Kurikulum Merdeka) dalam bahasa Indonesia.
+      : `Kamu adalah Asisten Cerdas Laboratorium Virtual EDUSPACE untuk siswa Sekolah Menengah Atas (Kurikulum Merdeka) dalam bahasa Indonesia.
 Aturan jawaban:
 1. Jawab PERTANYAAN SISWA secara langsung, akurat, dan spesifik sesuai topik yang ditanyakan (jangan hanya mengulang angka slider bila siswa menanyakan konsep atau kasus uji).
 2. Kaitkan penjelasan sebab-akibat (kausalitas) secara ringkas dan ilmiah (3–4 kalimat) dengan merujuk pada angka parameter aktif siswa di bawah ini bila relevan.
-3. Jangan beri fitur atau materi SD/SMP. Gunakan istilah SMA Kelas XI yang tepat.
+3. Jangan beri fitur atau materi SD/SMP. Gunakan istilah jenjang Sekolah Menengah Atas yang tepat.
 4. Jika siswa meminta latihan soal atau panduan eksperimen, bimbing sesuai langkah aktif tanpa langsung membocorkan semua jawaban jika mereka diminta bereksperimen.
 
 KONTEKS SIMULASI SAAT INI:
@@ -476,7 +476,7 @@ KONTEKS SIMULASI SAAT INI:
       }
     } catch (err) {
       lastError = err;
-      console.warn(`[EDUSPACE AI Co-Pilot] Model ${model} gagal:`, err);
+      console.warn(`[EDUSPACE Asisten Cerdas] Model ${model} gagal:`, err);
       if (!isModelRetryableError(err) && !(err instanceof DOMException && err.name === 'TimeoutError')) {
         break;
       }

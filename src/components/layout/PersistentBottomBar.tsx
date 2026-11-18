@@ -99,7 +99,7 @@ export function PersistentBottomBar() {
 
     return (
       <section
-        aria-label="Bar Data Rumus dan AI Co-Pilot"
+        aria-label="Bar Data Rumus dan Asisten Cerdas"
         className="no-print tactile-raised mx-auto mt-6 flex w-full max-w-[1440px] flex-col items-stretch gap-6 rounded-3xl p-5 lg:flex-row lg:p-6"
       >
         {/* Kiri: Data & Rumus Real-Time */}
@@ -139,13 +139,13 @@ export function PersistentBottomBar() {
         {/* Pemisah lembut */}
         <div className="hidden w-px bg-[#E3DED2] lg:block" />
 
-        {/* Kanan: AI Co-Pilot Observasi & Input */}
+        {/* Kanan: Asisten Cerdas Observasi & Input */}
         <div className="flex w-full flex-col justify-between gap-3 lg:w-1/2">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-[#0E5A63]" />
               <span className="text-xs font-semibold tracking-wider text-[#23272A] uppercase">
-                AI Co-Pilot Laboratorium
+                Asisten Cerdas Laboratorium
               </span>
             </div>
             <button
@@ -170,12 +170,12 @@ export function PersistentBottomBar() {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={`Tanya AI Co-Pilot mengenai ${mod.shortTitle}...`}
-              className="w-full border-0 bg-transparent py-1.5 text-xs text-[#23272A] placeholder:text-[#5C6064] focus:outline-none sm:text-sm"
+              placeholder={`Tanya Asisten Cerdas mengenai ${mod.shortTitle}...`}
+              className="w-full border-0 bg-transparent py-1.5 text-base text-[#23272A] placeholder:text-[#5C6064] focus:outline-none sm:text-sm"
             />
             <button
               type="submit"
-              aria-label="Kirim pertanyaan ke AI Co-Pilot"
+              aria-label="Kirim pertanyaan ke Asisten Cerdas"
               disabled={isCopilotLoading}
               className="tactile-pill-cta flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full"
             >
@@ -274,7 +274,7 @@ export function PersistentBottomBar() {
             : isPlantCellSummary
               ? 'Observasi Sel Tumbuhan'
               : 'Percobaan Terkalibrasi'}{' '}
-          • SMA Kelas XI
+          • Jenjang Sekolah Menengah Atas
         </span>
       </div>
 

@@ -5,8 +5,10 @@ import { MODULES } from '../data/modules';
 import {
   WORKSHEET_CONFIG_BY_MODULE,
   buildModuleSummaryFromExplored,
+  buildModuleSummaryFromRecords,
   createExploredItemFromModuleState,
 } from '../data/worksheetTemplates';
+import { formatWorksheetText } from '../services/exportReport';
 import { computeAnatomyResult, resolveAnatomyExploration } from './biologyAnatomy';
 import { computeCellResult, resolvePlantCellObservation } from './biologyCell';
 import {
@@ -390,5 +392,54 @@ describe('EDUSPACE 5 Deterministic Science & Math Engines', () => {
     const converted = convertFormulaToLatex('d(P, BDG) = 6·(1 + 1.00) / √3 = 6.93 cm');
     expect(converted).toContain('\\sqrt{3}');
     expect(converted).toContain('\\cdot');
+  });
+
+  it('Ekspor .txt & Rangkuman Real-Time: menghasilkan ringkasan naratif tanpa format tabel dan tanpa label Kelas XI', () => {
+    const inclinedParams = {
+      objectType: 'barang' as const,
+      theta: 30,
+      mass: 5,
+      mu: 0.2,
+      rampLengthMeters: 6,
+    };
+    const explored = createExploredItemFromModuleState(
+      'physics-inclined',
+      inclinedParams,
+      computeInclinedResult(inclinedParams),
+      '20:15',
+    );
+    const records = [
+      {
+        id: 'rec-test-1',
+        moduleId: 'physics-inclined' as const,
+        moduleTitle: 'Bidang Miring & Vektor Gaya',
+        subject: 'fisika' as const,
+        timestamp: '20:15',
+        inputSummary: explored.inputSummary,
+        outputSummary: explored.outputSummary,
+        primaryNumericValue: explored.primaryNumericValue,
+        primaryUnit: explored.primaryUnit,
+        formulaText: explored.formulaText,
+        narrativeSummary: explored.summaryLine,
+        recordKind: explored.recordKind,
+      },
+    ];
+
+    const autoSummary = buildModuleSummaryFromRecords('physics-inclined', records);
+    expect(autoSummary).toContain('1 HASIL PRAKTIKUM');
+    expect(autoSummary).toContain('Objek Peti Barang');
+
+    const txt = formatWorksheetText(
+      records,
+      'Sudut lebih besar membuat percepatan bertambah.',
+      'Bidang Miring & Vektor Gaya',
+      'physics-inclined',
+    );
+    expect(txt).toContain('Kurikulum Merdeka / Sekolah Menengah Atas');
+    expect(txt).toContain('RINGKASAN LAPORAN PRAKTIKUM VIRTUAL');
+    expect(txt).toContain('Sudut lebih besar membuat percepatan bertambah.');
+    expect(txt).not.toContain('Kelas XI');
+    expect(txt).not.toContain('Variabel Input:');
+    expect(txt).not.toContain('Hasil Hitung:');
   });
 });

@@ -37,7 +37,7 @@ export function GeometryBottomPanel({
             </span>
           </div>
           <span className="tactile-inset rounded-lg px-2.5 py-0.5 font-code text-[11px] font-semibold text-[#0E5A63]">
-            {isTransform ? tVal.natureLabel : 'Kelas XI · Lingkaran'}
+            {isTransform ? tVal.natureLabel : 'Geometri · Lingkaran'}
           </span>
         </div>
 

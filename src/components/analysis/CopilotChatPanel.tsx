@@ -33,7 +33,7 @@ export function CopilotChatPanel({
   isAnatomy = false,
   quickActionsOverride,
   placeholder,
-  className = 'min-h-[560px] w-full lg:w-[55%]',
+  className = 'min-h-[420px] w-full lg:min-h-[560px] lg:w-[55%]',
 }: CopilotChatPanelProps) {
   const [input, setInput] = useState('');
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
@@ -56,22 +56,22 @@ export function CopilotChatPanel({
     placeholder ??
     (isAnatomy
       ? 'Tanya tentang ruang jantung, katup, bronkus, alveolus, atau gangguan kardiorespirasi...'
-      : 'Tanya AI Co-Pilot mengenai konsep, grafik, atau turunan rumus...');
+      : 'Tanya Asisten Cerdas mengenai konsep, grafik, atau turunan rumus...');
 
   return (
     <TactileCard
       variant="raised"
-      className={`flex flex-col justify-between rounded-3xl p-5 lg:p-6 ${className}`}
+      className={`flex flex-col justify-between rounded-3xl p-4 sm:p-5 lg:p-6 ${className}`}
     >
-      {/* Header AI Co-Pilot + Context Pill */}
+      {/* Header Asisten Cerdas + Context Pill */}
       <div className="flex flex-wrap items-center justify-between gap-2 pb-3">
         <div className="flex items-center gap-2.5">
-          <div className="tactile-inset flex h-8 w-8 items-center justify-center rounded-full text-[#0E5A63]">
+          <div className="tactile-inset flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#0E5A63]">
             <Bot className="h-4 w-4" strokeWidth={2} />
           </div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-base font-bold text-[#23272A]">
-              AI Co-Pilot Laboratorium
+          <div className="flex flex-wrap items-center gap-2">
+            <h2 className="text-sm font-bold text-[#23272A] sm:text-base">
+              Asisten Cerdas Laboratorium
             </h2>
             <span className="tactile-inset inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-code text-[11px] font-medium text-[#0E5A63]">
               <span className="h-1.5 w-1.5 rounded-full bg-[#0E5A63]" />
@@ -80,7 +80,7 @@ export function CopilotChatPanel({
           </div>
         </div>
 
-        <div className="tactile-inset rounded-full px-3 py-1 font-code text-[11px] font-medium text-[#5C6064]">
+        <div className="tactile-inset max-w-full truncate rounded-full px-3 py-1 font-code text-[11px] font-medium text-[#5C6064]">
           Membaca: {computedResult.summaryInputText}
         </div>
       </div>
@@ -126,9 +126,9 @@ export function CopilotChatPanel({
                 ) : null}
               </div>
               <div className="flex items-center gap-1 px-1 text-[#5C6064]">
-                <CheckCircle2 className="h-3.5 w-3.5 text-[#0E5A63]" strokeWidth={2} />
+                <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[#0E5A63]" strokeWidth={2} />
                 <span className="font-code text-[11px]">
-                  {msg.timestamp} · {msg.verifiedLabel ?? 'Terverifikasi SMA Kelas XI'}
+                  {msg.timestamp} · {msg.verifiedLabel ?? 'Terverifikasi Kurikulum Merdeka'}
                 </span>
               </div>
             </div>
@@ -137,7 +137,7 @@ export function CopilotChatPanel({
 
         {isCopilotLoading ? (
           <div className="tactile-inset w-fit rounded-2xl px-4 py-2.5 font-code text-xs text-[#5C6064]">
-            AI Co-Pilot sedang menganalisis parameter...
+            Asisten Cerdas sedang menganalisis parameter...
           </div>
         ) : null}
       </div>
@@ -151,7 +151,7 @@ export function CopilotChatPanel({
               type="button"
               disabled={isCopilotLoading}
               onClick={() => onSendMessage(qa)}
-              className="tactile-inset cursor-pointer rounded-full px-3.5 py-1.5 text-xs font-medium text-[#23272A] transition-colors hover:text-[#0E5A63]"
+              className="tactile-inset cursor-pointer rounded-full px-3.5 py-1.5 text-left text-xs font-medium text-[#23272A] transition-colors hover:text-[#0E5A63]"
             >
               {qa}
             </button>
@@ -159,19 +159,19 @@ export function CopilotChatPanel({
         </div>
 
         <form onSubmit={handleSend} className="flex items-center gap-2">
-          <div className="tactile-inset flex flex-1 items-center rounded-full px-4 py-2.5">
+          <div className="tactile-inset flex flex-1 items-center rounded-full px-4 py-2">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder={resolvedPlaceholder}
-              className="w-full border-0 bg-transparent text-sm text-[#23272A] placeholder:text-[#5C6064] focus:outline-none"
+              className="w-full border-0 bg-transparent text-base text-[#23272A] placeholder:text-[#5C6064] focus:outline-none sm:text-sm"
             />
           </div>
           <button
             type="submit"
             disabled={isCopilotLoading}
-            className="tactile-pill-cta flex cursor-pointer items-center gap-1.5 rounded-full px-5 py-2.5 text-xs font-semibold sm:text-sm"
+            className="tactile-pill-cta flex min-h-[42px] shrink-0 cursor-pointer items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold sm:px-5 sm:text-sm"
           >
             <span>Kirim</span>
             <Send className="h-4 w-4" strokeWidth={2} />

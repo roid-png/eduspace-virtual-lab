@@ -694,39 +694,38 @@ export function LabWorkspacePage() {
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-[1440px] flex-col px-4 py-6 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
+    <div className="mx-auto flex w-full max-w-[1440px] flex-col px-3 py-4 sm:px-6 sm:py-6 lg:px-8">
+      <div className="grid grid-cols-1 items-stretch gap-5 sm:gap-6 lg:grid-cols-12">
         {/* Kanan di Desktop, Atas di Mobile: Kanvas 3D Isometrik (8 kolom) */}
         <TactileCard
           variant="raised"
-          className="order-1 flex min-h-[380px] flex-col rounded-3xl p-4 sm:min-h-[500px] lg:order-2 lg:col-span-8 lg:min-h-[560px]"
+          className="order-1 flex min-h-[330px] flex-col rounded-3xl p-3 sm:min-h-[500px] sm:p-4 lg:order-2 lg:col-span-8 lg:min-h-[560px]"
         >
           <TactileCard
             variant="inset-deep"
-            className="relative h-full min-h-[340px] w-full flex-1 overflow-hidden rounded-2xl sm:min-h-[460px]"
+            className="relative h-full min-h-[300px] w-full flex-1 overflow-hidden rounded-2xl sm:min-h-[460px]"
           >
-            {/* Top-Left Stage Metadata Pills */}
-            <div className="pointer-events-none absolute top-3 left-3 z-20 flex flex-wrap items-center gap-2 sm:top-3.5 sm:left-3.5">
-              <div className="tactile-raised flex items-center gap-1.5 rounded-full px-2.5 py-1 sm:px-3">
-                <span className="h-2 w-2 rounded-full bg-[#0E5A63]" />
-                <span className="font-code text-[10px] font-medium text-[#23272A] sm:text-[11px]">
-                  <span className="hidden sm:inline">Kamera </span>Isometrik
-                  <span className="hidden sm:inline"> · Skala</span> 1:1
-                </span>
+            {/* Top Overlay Row: Stage Metadata Pills + Live Readout Callout (tidak bertabrakan di layar kecil) */}
+            <div className="pointer-events-none absolute inset-x-2.5 top-2.5 z-20 flex flex-wrap items-start justify-between gap-2 sm:inset-x-3.5 sm:top-3.5">
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="tactile-raised flex items-center gap-1.5 rounded-full px-2.5 py-1 sm:px-3">
+                  <span className="h-2 w-2 shrink-0 rounded-full bg-[#0E5A63]" />
+                  <span className="font-code text-[10px] font-medium text-[#23272A] sm:text-[11px]">
+                    <span className="hidden sm:inline">Kamera </span>Isometrik
+                    <span className="hidden sm:inline"> · Skala</span> 1:1
+                  </span>
+                </div>
+                <div className="tactile-raised hidden rounded-full px-3 py-1 sm:flex">
+                  <span className="font-code text-[11px] text-[#5C6064]">
+                    {mod.constantBadge}
+                  </span>
+                </div>
               </div>
-              <div className="tactile-raised hidden rounded-full px-3 py-1 sm:flex">
-                <span className="font-code text-[11px] text-[#5C6064]">
-                  {mod.constantBadge}
-                </span>
-              </div>
-            </div>
 
-            {/* Top-Right Live Readout Callout */}
-            <div className="pointer-events-none absolute top-3 right-3 z-20 sm:top-3.5 sm:right-3.5">
-              <div className="tactile-raised flex flex-col gap-0.5 rounded-2xl px-2.5 py-1.5 sm:px-3.5 sm:py-2">
-                <div className="flex items-center gap-1.5 font-code text-[11px] font-bold text-[#23272A] sm:gap-2 sm:text-xs">
-                  <span className="h-2 w-2 rounded-full bg-[#0E5A63]" />
-                  <span>{computedResult.calloutPrimary}</span>
+              <div className="tactile-raised flex max-w-full flex-col gap-0.5 rounded-2xl px-2.5 py-1.5 sm:px-3.5 sm:py-2">
+                <div className="flex items-center gap-1.5 font-code text-[10px] font-bold text-[#23272A] sm:gap-2 sm:text-xs">
+                  <span className="h-2 w-2 shrink-0 rounded-full bg-[#0E5A63]" />
+                  <span className="truncate">{computedResult.calloutPrimary}</span>
                 </div>
                 <span className="pl-3.5 font-code text-[10px] text-[#5C6064] sm:pl-4 sm:text-[11px]">
                   {computedResult.calloutSecondary}
@@ -770,15 +769,17 @@ export function LabWorkspacePage() {
             ) : null}
 
             {/* Bottom-Right Reset Camera Button */}
-            <div className="absolute right-3.5 bottom-3.5 z-10">
+            <div className="absolute right-2.5 bottom-2.5 z-10 sm:right-3.5 sm:bottom-3.5">
               <button
                 type="button"
                 onClick={resetCameraView}
-                className="tactile-raised tactile-raised-interactive flex h-9 cursor-pointer items-center gap-1.5 rounded-full px-3.5 text-[#23272A]"
+                aria-label="Reset Sudut Pandang"
+                className="tactile-raised tactile-raised-interactive flex h-9 cursor-pointer items-center gap-1.5 rounded-full px-3 text-[#23272A] sm:px-3.5"
               >
                 <Compass className="h-4 w-4 text-[#0E5A63]" strokeWidth={2} />
                 <span className="font-code text-[11px] font-medium">
-                  Reset Sudut Pandang
+                  <span className="hidden sm:inline">Reset Sudut Pandang</span>
+                  <span className="sm:hidden">Reset</span>
                 </span>
               </button>
             </div>
@@ -788,7 +789,7 @@ export function LabWorkspacePage() {
         {/* Kiri di Desktop, Bawah di Mobile: Panel Kontrol Variabel (4 kolom) */}
         <TactileCard
           variant="raised"
-          className="order-2 flex flex-col justify-between gap-5 rounded-3xl p-6 lg:order-1 lg:col-span-4"
+          className="order-2 flex flex-col justify-between gap-5 rounded-3xl p-4 sm:p-6 lg:order-1 lg:col-span-4"
         >
           <div className="flex flex-col gap-4">
             <div className="flex flex-col">

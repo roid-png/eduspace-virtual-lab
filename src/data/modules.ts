@@ -151,7 +151,7 @@ export const MODULES: ModuleDefinition[] = [
       {
         step: 3,
         shortLabel: '3. Pahami & Tanya AI',
-        instruction: 'Pelajari rincian tiap organel dan berdiskusi real-time bersama AI Co-Pilot di tab Analisis & AI.',
+        instruction: 'Pelajari rincian tiap organel dan berdiskusi real-time bersama Asisten Cerdas di tab Analisis & Asisten.',
       },
       {
         step: 4,
@@ -163,7 +163,7 @@ export const MODULES: ModuleDefinition[] = [
   {
     id: 'math-geometry3d',
     subject: 'matematika',
-    categoryLabel: 'Matematika Kelas XI',
+    categoryLabel: 'Geometri & Transformasi',
     title: 'Transformasi Geometri & Lingkaran',
     shortTitle: 'Matematika: Transformasi & Lingkaran',
     description:

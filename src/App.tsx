@@ -14,20 +14,26 @@ function EduspaceShell() {
     view === 'workspace' || view === 'analysis' || view === 'worksheet';
 
   return (
-    <div className="min-h-screen bg-[#EFECE4] text-[#23272A]">
+    <div className="app-shell min-h-[100dvh] bg-[#EFECE4] text-[#23272A]">
       <Header />
 
       {toastMessage ? (
         <div
           role="status"
           aria-live="polite"
-          className="no-print fixed top-20 right-4 z-50 rounded-full bg-[#0E5A63] px-4 py-2 font-code text-xs font-medium text-white shadow-[4px_4px_12px_rgba(14,90,99,0.28)] sm:right-8"
+          className={`no-print fixed right-4 z-50 max-w-[calc(100vw-2rem)] rounded-full bg-[#0E5A63] px-4 py-2 font-code text-xs font-medium text-white shadow-[4px_4px_12px_rgba(14,90,99,0.28)] sm:right-8 ${
+            isInsideModule ? 'top-28 lg:top-20' : 'top-20'
+          }`}
         >
           {toastMessage}
         </div>
       ) : null}
 
-      <main className="w-full pt-24 pb-10 lg:pt-20">
+      <main
+        className={`app-main w-full pb-[max(2.5rem,env(safe-area-inset-bottom,0px))] ${
+          isInsideModule ? 'pt-[7.5rem] lg:pt-20' : 'pt-20'
+        }`}
+      >
         {view === 'landing' ? <LandingPage /> : null}
         {view === 'catalog' ? <CatalogPage /> : null}
         {view === 'workspace' ? <LabWorkspacePage /> : null}

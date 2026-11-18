@@ -48,7 +48,7 @@ export function GeometryAnalysisView({
           <span>Lab 3D</span>
           <span className="opacity-40">/</span>
           <span className="font-semibold text-[#0E5A63]">
-            Detailing Rumus Geometri &amp; AI Co-Pilot
+            Detailing Rumus Geometri &amp; Asisten Cerdas
           </span>
         </div>
 
@@ -256,7 +256,7 @@ export function GeometryAnalysisView({
           </div>
         </TactileCard>
 
-        {/* KOLOM KANAN: AI Co-Pilot Kontekstual Transformasi Geometri & Lingkaran */}
+        {/* KOLOM KANAN: Asisten Cerdas Kontekstual Transformasi Geometri & Lingkaran */}
         <CopilotChatPanel
           mod={mod}
           computedResult={computedResult}
@@ -264,8 +264,8 @@ export function GeometryAnalysisView({
           isCopilotLoading={isCopilotLoading}
           hasGeminiKey={hasGeminiKey}
           onSendMessage={onSendMessage}
-          placeholder="Tanya AI Co-Pilot tentang matriks transformasi, determinan luas, busur, sudut keliling, atau garis singgung..."
-          className="min-h-[600px] w-full lg:w-[52%]"
+          placeholder="Tanya Asisten Cerdas tentang matriks transformasi, determinan luas, busur, sudut keliling, atau garis singgung..."
+          className="min-h-[420px] w-full lg:min-h-[600px] lg:w-[52%]"
         />
       </div>
     </div>

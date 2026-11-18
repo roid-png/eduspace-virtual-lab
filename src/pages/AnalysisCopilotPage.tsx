@@ -109,7 +109,7 @@ export function AnalysisCopilotPage() {
           <span>Lab 3D</span>
           <span className="opacity-40">/</span>
           <span className="font-semibold text-[#0E5A63]">
-            {isAnatomy ? 'Analisis Struktur & Co-Pilot' : 'Analisis Rumus & Co-Pilot'}
+            {isAnatomy ? 'Analisis Struktur & Asisten Cerdas' : 'Analisis Rumus & Asisten Cerdas'}
           </span>
         </div>
 

@@ -76,7 +76,7 @@ export function CalloutPin({
 
       <ProjectedHtml3D center position={labelOffset}>
         <div
-          className="flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[10px] font-medium"
+          className="flex max-w-[165px] items-center gap-1 truncate rounded-full px-1.5 py-0.5 text-[9px] font-medium sm:max-w-none sm:px-2 sm:text-[10px]"
           style={{
             backgroundColor: '#F6F3EC',
             color: '#23272A',

@@ -190,19 +190,53 @@ export function LabProvider({ children }: { children: ReactNode }) {
     moduleId: K,
     moduleParams: ModuleParamsMap[K],
   ) => {
+    const mod = MODULE_MAP[moduleId];
     const computed = computeModuleResult(moduleId, moduleParams);
+    const nowClock = formatClock();
     const nextItem = createExploredItemFromModuleState(
       moduleId,
       moduleParams,
       computed,
-      formatClock(),
+      nowClock,
     );
+
     setExploredByModule((prev) => {
       const currList = prev[moduleId] ?? [];
       if (currList.some((item) => item.id === nextItem.id)) return prev;
       return {
         ...prev,
         [moduleId]: [...currList, nextItem],
+      };
+    });
+
+    // Sinkronisasi real-time ke tabel Lembar Kerja saat praktikum berlangsung
+    setRecordsByModule((prev) => {
+      const currRecords = prev[moduleId] ?? [];
+      const dedupKey = `${nextItem.inputSummary}::${nextItem.formulaText}`;
+      const existingIdx = currRecords.findIndex(
+        (r) => `${r.inputSummary}::${r.formulaText}` === dedupKey,
+      );
+      if (existingIdx !== -1) {
+        return prev;
+      }
+      const nextRecord: ExperimentRecord = {
+        id: `rec-rt-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        moduleId,
+        moduleTitle: mod.title,
+        subject: mod.subject,
+        timestamp: nowClock,
+        inputSummary: nextItem.inputSummary,
+        outputSummary: nextItem.outputSummary,
+        primaryNumericValue: nextItem.primaryNumericValue,
+        primaryUnit: nextItem.primaryUnit,
+        formulaText: nextItem.formulaText,
+        narrativeSummary: nextItem.summaryLine,
+        recordKind: nextItem.recordKind,
+        anatomyRecord: nextItem.anatomyRecord,
+      };
+      return {
+        ...prev,
+        [moduleId]: [...currRecords, nextRecord],
       };
     });
   };
@@ -424,6 +458,13 @@ export function LabProvider({ children }: { children: ReactNode }) {
     const mod = MODULE_MAP[activeModuleId];
     const primaryNumericValue = Number(computedResult.rawNumbers.primaryValue ?? 0);
     const primaryUnit = String(computedResult.rawNumbers.primaryUnit ?? '');
+    const nowClock = formatClock();
+    const exploredSnapshot = createExploredItemFromModuleState(
+      activeModuleId,
+      paramsMap[activeModuleId],
+      computedResult,
+      nowClock,
+    );
 
     let nextRecord: ExperimentRecord;
 
@@ -434,12 +475,13 @@ export function LabProvider({ children }: { children: ReactNode }) {
         moduleId: activeModuleId,
         moduleTitle: mod.title,
         subject: mod.subject,
-        timestamp: formatClock(),
+        timestamp: nowClock,
         inputSummary: anatomyExp.recordPayload.organAndMode,
         outputSummary: anatomyExp.recordPayload.physiologicalFunction,
         primaryNumericValue,
         primaryUnit,
         formulaText: anatomyExp.recordPayload.identifiedStructures,
+        narrativeSummary: exploredSnapshot.summaryLine,
         recordKind: 'anatomy',
         anatomyRecord: anatomyExp.recordPayload,
       };
@@ -449,13 +491,15 @@ export function LabProvider({ children }: { children: ReactNode }) {
         moduleId: activeModuleId,
         moduleTitle: mod.title,
         subject: mod.subject,
-        timestamp: formatClock(),
+        timestamp: nowClock,
         inputSummary: computedResult.summaryInputText,
         outputSummary: computedResult.summaryOutputText,
         primaryNumericValue,
         primaryUnit,
         formulaText: computedResult.primaryEquation,
-        recordKind: 'numeric',
+        narrativeSummary: exploredSnapshot.summaryLine,
+        recordKind: exploredSnapshot.recordKind,
+        anatomyRecord: exploredSnapshot.anatomyRecord,
       };
     }
 
@@ -540,6 +584,7 @@ export function LabProvider({ children }: { children: ReactNode }) {
         primaryNumericValue: item.primaryNumericValue,
         primaryUnit: item.primaryUnit,
         formulaText: item.formulaText,
+        narrativeSummary: item.summaryLine,
         recordKind: item.recordKind,
         anatomyRecord: item.anatomyRecord,
       });
@@ -582,15 +627,15 @@ export function LabProvider({ children }: { children: ReactNode }) {
           role: 'assistant',
           text:
             activeModuleId === 'biology-anatomy'
-              ? `Halo! Saya AI Co-Pilot untuk modul ${mod.title}. ${computedResult.copilotInsight} Tanyakan tentang struktur ruang jantung, katup, percabangan bronkus, atau gangguan sistem kardiorespirasi.`
+              ? `Halo! Saya Asisten Cerdas untuk modul ${mod.title}. ${computedResult.copilotInsight} Tanyakan tentang struktur ruang jantung, katup, percabangan bronkus, atau gangguan sistem kardiorespirasi.`
               : activeModuleId === 'biology-cell'
-                ? `Halo! Saya AI Co-Pilot khusus ${mod.title}. ${computedResult.copilotInsight} Tanyakan tentang struktur dan fungsi organel yang sedang kamu amati (Nukleus, Kloroplas, Vakuola, Mitokondria, RE, Badan Golgi, Plasmodesmata) maupun perbedaan saat sel terkena cahaya dan gelap!`
+                ? `Halo! Saya Asisten Cerdas khusus ${mod.title}. ${computedResult.copilotInsight} Tanyakan tentang struktur dan fungsi organel yang sedang kamu amati (Nukleus, Kloroplas, Vakuola, Mitokondria, RE, Badan Golgi, Plasmodesmata) maupun perbedaan saat sel terkena cahaya dan gelap!`
                 : activeModuleId === 'math-geometry3d'
-                  ? `Halo! Saya AI Co-Pilot untuk modul ${mod.title} Kelas XI. ${computedResult.copilotInsight} Tanyakan mengenai perkalian matriks transformasi 2×2, determinan luas bayangan, panjang busur, sudut keliling, maupun pembuktian garis singgung lingkaran!`
-                  : `Halo! Saya AI Co-Pilot untuk modul ${mod.title}. ${computedResult.copilotInsight}`,
+                  ? `Halo! Saya Asisten Cerdas untuk modul ${mod.title}. ${computedResult.copilotInsight} Tanyakan mengenai perkalian matriks transformasi 2×2, determinan luas bayangan, panjang busur, sudut keliling, maupun pembuktian garis singgung lingkaran!`
+                  : `Halo! Saya Asisten Cerdas untuk modul ${mod.title}. ${computedResult.copilotInsight}`,
           formulaChip: computedResult.primaryEquation,
           timestamp: formatClock(),
-          verifiedLabel: 'Konteks Modul SMA Kelas XI',
+          verifiedLabel: 'Konteks Kurikulum Merdeka · SMA',
         },
       ];
   }, [activeModuleId, chatHistoryMap, computedResult]);
@@ -663,7 +708,7 @@ export function LabProvider({ children }: { children: ReactNode }) {
 
       const finalVerifiedLabel =
         reply.mode === 'gemini'
-          ? `${reply.modelUsed ?? 'Gemini Flash'} · Terverifikasi SMA Kelas XI`
+          ? `${reply.modelUsed ?? 'Gemini Flash'} · Terverifikasi Kurikulum Merdeka`
           : reply.errorDetail
             ? `Fallback Lokal (${reply.errorDetail})`
             : 'Analisis Deterministik Lokal (Mode Offline)';

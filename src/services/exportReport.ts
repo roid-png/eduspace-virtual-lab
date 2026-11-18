@@ -1,6 +1,9 @@
 import { ANATOMY_LICENSE_ATTRIBUTION } from '../data/anatomyData';
 import { PLANT_CELL_LICENSE_ATTRIBUTION } from '../data/plantCellData';
-import { WORKSHEET_CONFIG_BY_MODULE } from '../data/worksheetTemplates';
+import {
+  WORKSHEET_CONFIG_BY_MODULE,
+  buildRecordNarrativeSentence,
+} from '../data/worksheetTemplates';
 import type { ExperimentRecord, ModuleId } from '../types/lab';
 
 export function formatWorksheetText(
@@ -17,60 +20,52 @@ export function formatWorksheetText(
   const cfg = moduleId ? WORKSHEET_CONFIG_BY_MODULE[moduleId] : undefined;
 
   const lines: string[] = [
-    'LEMBAR KERJA PRAKTIKUM VIRTUAL — EDUSPACE (SMA KELAS XI)',
+    'RINGKASAN LAPORAN PRAKTIKUM VIRTUAL — EDUSPACE',
+    'Jenjang        : Kurikulum Merdeka / Sekolah Menengah Atas',
     ...(moduleTitle ? [`Modul          : ${moduleTitle}`] : []),
     `Tanggal Ekspor : ${dateStr}`,
-    `Total Data     : ${records.length}`,
-    '------------------------------------------------------------',
+    `Total Aktivitas: ${records.length} hasil praktikum`,
+    '============================================================',
+    '',
   ];
 
   let hasAnatomy = false;
   if (records.length === 0) {
-    lines.push('Belum ada data percobaan yang dicatat.');
+    lines.push(
+      'RINGKASAN PRAKTIKUM:',
+      'Belum ada aktivitas praktikum yang tercatat pada sesi ini. Lakukan simulasi atau eksplorasi model 3D agar hasil praktikum langsung dirangkum di sini.',
+    );
   } else {
+    lines.push(
+      cfg?.summaryHeaderPrefix
+        ? `${cfg.summaryHeaderPrefix}:`
+        : 'RINGKASAN HASIL PRAKTIKUM:',
+      '',
+    );
     records.forEach((rec, idx) => {
       const isAnatomy =
         rec.recordKind === 'anatomy' || rec.moduleId === 'biology-anatomy';
-      if (isAnatomy) {
-        hasAnatomy = true;
-        lines.push(
-          `Observasi ${idx + 1} [${rec.moduleTitle}] (${rec.timestamp})`,
-          `  Organ & Mode           : ${rec.anatomyRecord?.organAndMode ?? rec.inputSummary}`,
-          `  Struktur Diidentifikasi: ${rec.anatomyRecord?.identifiedStructures ?? rec.formulaText}`,
-          `  Fungsi Fisiologis      : ${rec.anatomyRecord?.physiologicalFunction ?? rec.outputSummary}`,
-        );
-      } else {
-        const col1 = cfg?.col1Label ?? 'Variabel Input';
-        const col2 = cfg?.col2Label ?? 'Hasil Hitung';
-        lines.push(
-          `${cfg?.indexLabel ?? 'Uji'} ${idx + 1} [${rec.moduleTitle}] (${rec.timestamp})`,
-          `  ${col1}: ${rec.inputSummary}`,
-          `  ${col2}: ${rec.outputSummary}`,
-          `  Persamaan: ${rec.formulaText}`,
-        );
-      }
+      if (isAnatomy) hasAnatomy = true;
+      const narrative = buildRecordNarrativeSentence(rec);
+      lines.push(`${idx + 1}. (Pukul ${rec.timestamp}) ${narrative}`);
     });
   }
 
   if (manualNote.trim()) {
     lines.push(
-      '------------------------------------------------------------',
-      'RANGKUMAN & CATATAN PENGAMATAN SISWA:',
+      '',
+      '============================================================',
+      'KESIMPULAN & CATATAN PENGAMATAN SISWA:',
+      '',
       manualNote.trim(),
     );
   }
 
   if (hasAnatomy || moduleId === 'biology-anatomy') {
-    lines.push(
-      '------------------------------------------------------------',
-      ANATOMY_LICENSE_ATTRIBUTION,
-    );
+    lines.push('', '------------------------------------------------------------', ANATOMY_LICENSE_ATTRIBUTION);
   }
   if (moduleId === 'biology-cell') {
-    lines.push(
-      '------------------------------------------------------------',
-      PLANT_CELL_LICENSE_ATTRIBUTION,
-    );
+    lines.push('', '------------------------------------------------------------', PLANT_CELL_LICENSE_ATTRIBUTION);
   }
 
   return lines.join('\n');

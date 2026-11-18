@@ -434,7 +434,7 @@ export function InclinedAnalysisView({
         </section>
       </div>
 
-      {/* Tambahan Fitur AI Co-Pilot Laboratorium untuk Halaman Analisis & Rumus */}
+      {/* Tambahan Fitur Asisten Cerdas Laboratorium untuk Halaman Analisis & Rumus */}
       <CopilotChatPanel
         mod={mod}
         computedResult={computedResult}
@@ -442,8 +442,8 @@ export function InclinedAnalysisView({
         isCopilotLoading={isCopilotLoading}
         hasGeminiKey={hasGeminiKey}
         onSendMessage={onSendMessage}
-        placeholder="Tanya AI Co-Pilot mengenai gaya bidang miring, tinggi h, berat W, gesekan μ, atau Hukum II Newton..."
-        className="min-h-[440px] w-full"
+        placeholder="Tanya Asisten Cerdas mengenai gaya bidang miring, tinggi h, berat W, gesekan μ, atau Hukum II Newton..."
+        className="min-h-[400px] w-full lg:min-h-[440px]"
       />
     </div>
   );

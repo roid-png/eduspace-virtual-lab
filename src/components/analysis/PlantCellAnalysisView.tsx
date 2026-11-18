@@ -72,7 +72,7 @@ export function PlantCellAnalysisView({
           <span>Lab 3D</span>
           <span className="opacity-40">/</span>
           <span className="font-semibold text-[#0E5A63]">
-            Pengamatan Organel Sel Tumbuhan &amp; Co-Pilot
+            Pengamatan Organel Sel Tumbuhan &amp; Asisten Cerdas
           </span>
         </div>
 
@@ -307,7 +307,7 @@ export function PlantCellAnalysisView({
           </div>
         </TactileCard>
 
-        {/* KOLOM KANAN: AI Co-Pilot Khusus Sel Tumbuhan Real-Time */}
+        {/* KOLOM KANAN: Asisten Cerdas Khusus Sel Tumbuhan Real-Time */}
         <CopilotChatPanel
           mod={mod}
           computedResult={computedResult}
@@ -317,8 +317,8 @@ export function PlantCellAnalysisView({
           onSendMessage={onSendMessage}
           isAnatomy
           quickActionsOverride={dynamicQuickActions}
-          placeholder="Tanya AI Co-Pilot tentang nukleus, kloroplas, vakuola, efek cahaya gelap/terang, atau bagian sel lain..."
-          className="min-h-[600px] w-full lg:w-[52%]"
+          placeholder="Tanya Asisten Cerdas tentang nukleus, kloroplas, vakuola, efek cahaya gelap/terang, atau bagian sel lain..."
+          className="min-h-[420px] w-full lg:min-h-[600px] lg:w-[52%]"
         />
       </div>
     </div>
