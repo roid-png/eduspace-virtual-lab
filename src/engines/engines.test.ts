@@ -374,7 +374,11 @@ describe('EDUSPACE 5 Deterministic Science & Math Engines', () => {
 
     const details = buildGeometryAnalysisDetails({ ...baseGeom, subMode: 'lingkaran' });
     expect(details.breakdownSteps).toHaveLength(4);
-    expect(details.concepts).toHaveLength(2);
+    expect(details.concepts).toHaveLength(4);
+    expect(details.primaryExplanation.length).toBeGreaterThan(10);
+    details.concepts.forEach((c) => {
+      expect(c.explanation.length).toBeGreaterThan(10);
+    });
 
     const computedCircle = computeGeometry3DResult({ ...baseGeom, subMode: 'lingkaran' });
     expect(computedCircle.chart.points).toHaveLength(0);

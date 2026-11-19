@@ -241,6 +241,7 @@ export function calculateCircleGeometry(
 
 export function buildGeometryAnalysisDetails(params: Geometry3DParams): {
   subMode: Geometry3DParams['subMode'];
+  primaryExplanation: string;
   transformValues: TransformationGeometryValues;
   circleValues: CircleGeometryValues;
   breakdownSteps: GeometryBreakdownStep[];
@@ -250,6 +251,11 @@ export function buildGeometryAnalysisDetails(params: Geometry3DParams): {
   const cVal = calculateCircleGeometry(params);
 
   if (params.subMode === 'transformasi') {
+    const primaryExplanation =
+      params.transformType === 'translasi'
+        ? `Rumus ini menggeser titik A(${fmtNum(tVal.points[0].x)}, ${fmtNum(tVal.points[0].y)}) sejauh (${fmtNum(tVal.translationVec[0])}, ${fmtNum(tVal.translationVec[1])}) ke bayangan A'(${fmtNum(tVal.transformedPoints[0].x)}, ${fmtNum(tVal.transformedPoints[0].y)}) tanpa mengubah ukuran.`
+        : `Perkalian matriks 2×2 memetakan koordinat awal A(${fmtNum(tVal.points[0].x)}, ${fmtNum(tVal.points[0].y)}) menjadi bayangan A'(${fmtNum(tVal.transformedPoints[0].x)}, ${fmtNum(tVal.transformedPoints[0].y)}) dengan skala luas ${tVal.absDeterminant.toFixed(2)}×.`;
+
     const matrixDescLatex =
       params.transformType === 'translasi'
         ? `\\vec{T} = \\begin{pmatrix} a \\\\ b \\end{pmatrix} = \\begin{pmatrix} ${fmtNum(tVal.translationVec[0])} \\\\ ${fmtNum(tVal.translationVec[1])} \\end{pmatrix}`
@@ -263,15 +269,15 @@ export function buildGeometryAnalysisDetails(params: Geometry3DParams): {
         plainText: tVal.transformTitle,
         simpleExplanation:
           params.transformType === 'translasi'
-            ? 'Translasi menggeser setiap titik dengan menambahkan vektor (a, b) tanpa mengubah ukuran maupun sudut.'
-            : 'Matriks transformasi 2×2 mengalikan vektor kolom tiap titik sudut bangun awal untuk memetakan posisi bayangannya.',
+            ? 'Translasi menggeser setiap titik dengan menambahkan vektor (a, b) tanpa mengubah bentuk maupun sudut.'
+            : 'Matriks 2×2 mengalikan vektor kolom tiap titik sudut untuk menentukan posisi bayangan barunya.',
       },
       {
         step: 2,
         title: 'Pemetaan Titik Sudut Utama A → A\'',
         latex: tVal.pointPairs[0].stepLatex,
         plainText: tVal.pointPairs[0].stepPlain,
-        simpleExplanation: `Titik sudut A(${fmtNum(tVal.points[0].x)}, ${fmtNum(tVal.points[0].y)}) berpindah ke bayangan A'(${fmtNum(tVal.transformedPoints[0].x)}, ${fmtNum(tVal.transformedPoints[0].y)}).`,
+        simpleExplanation: `Titik awal A(${fmtNum(tVal.points[0].x)}, ${fmtNum(tVal.points[0].y)}) berpindah ke koordinat bayangan A'(${fmtNum(tVal.transformedPoints[0].x)}, ${fmtNum(tVal.transformedPoints[0].y)}).`,
       },
       {
         step: 3,
@@ -279,14 +285,14 @@ export function buildGeometryAnalysisDetails(params: Geometry3DParams): {
         latex: `${tVal.pointPairs[1].stepLatex} \\quad \\Big|\\quad ${tVal.pointPairs[2].stepLatex}`,
         plainText: `${tVal.pointPairs[1].stepPlain} | ${tVal.pointPairs[2].stepPlain}`,
         simpleExplanation:
-          'Seluruh titik sudut pembentuk segitiga ABC mengalami pemetaan transformasi linear/translasi yang seragam.',
+          'Titik B dan C ikut mengalami aturan transformasi yang sama agar seluruh bentuk segitiga tetap utuh.',
       },
       {
         step: 4,
         title: 'Determinan Matriks & Luas Bayangan',
         latex: `L' = |\\det(M)| \\times L_{\\text{awal}} = ${tVal.absDeterminant.toFixed(2)} \\times ${tVal.initialArea.toFixed(1)} = ${tVal.imageArea.toFixed(2)}\\,\\text{satuan}^2`,
         plainText: `L' = ${tVal.imageArea.toFixed(2)} satuan^2`,
-        simpleExplanation: `Nilai mutlak determinan = ${tVal.absDeterminant.toFixed(2)} (${tVal.natureLabel}).`,
+        simpleExplanation: `Nilai mutlak determinan (${tVal.absDeterminant.toFixed(2)}) menentukan faktor perubahan luas dari bangun awal ke bayangannya.`,
       },
     ];
 
@@ -296,19 +302,34 @@ export function buildGeometryAnalysisDetails(params: Geometry3DParams): {
         title: 'Bentuk Umum Matriks Transformasi 2×2',
         latex: `\\begin{pmatrix} x' \\\\ y' \\end{pmatrix} = \\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}\\begin{pmatrix} x \\\\ y \\end{pmatrix}`,
         plainText: "(x', y') = M * (x, y)",
-        explanation: 'Berlaku untuk Refleksi, Rotasi, maupun Dilatasi berpusat di O(0,0).',
+        explanation: 'Mengalikan matriks 2×2 dengan koordinat awal (x, y) untuk menghasilkan bayangan pada Refleksi, Rotasi, atau Dilatasi.',
+      },
+      {
+        id: 'translation-vector',
+        title: 'Rumus Translasi (Pergeseran Vektor)',
+        latex: `\\begin{pmatrix} x' \\\\ y' \\end{pmatrix} = \\begin{pmatrix} x \\\\ y \\end{pmatrix} + \\begin{pmatrix} a \\\\ b \\end{pmatrix}`,
+        plainText: "(x', y') = (x + a, y + b)",
+        explanation: 'Menambahkan pergeseran horizontal a dan vertikal b langsung ke koordinat titik asal tanpa mengubah ukuran.',
       },
       {
         id: 'det-area',
         title: 'Determinan & Faktor Skala Luas',
         latex: `\\det(M) = ad - bc,\\;\\; L' = |\\det(M)| \\cdot L`,
         plainText: "L' = |det(M)| * L",
-        explanation: 'Jika |det(M)| = 1, bayangan kongruen (sama besar) dengan bangun awal.',
+        explanation: 'Menghitung luas bayangan: jika |det(M)| = 1 maka bangun kongruen, jika selain 1 maka luas ikut diskalakan.',
+      },
+      {
+        id: 'rotation-dilation',
+        title: 'Matriks Rotasi α & Dilatasi Skala k',
+        latex: `R_\\alpha = \\begin{pmatrix} \\cos\\alpha & -\\sin\\alpha \\\\ \\sin\\alpha & \\cos\\alpha \\end{pmatrix},\\;\\; D_k = \\begin{pmatrix} k & 0 \\\\ 0 & k \\end{pmatrix}`,
+        plainText: 'R_alpha = [[cos, -sin], [sin, cos]], D_k = [[k, 0], [0, k]]',
+        explanation: 'Rotasi memutar koordinat sebesar sudut α terhadap O(0,0), sedangkan Dilatasi memperbesar/memperkecil sejauh skala k.',
       },
     ];
 
     return {
       subMode: params.subMode,
+      primaryExplanation,
       transformValues: tVal,
       circleValues: cVal,
       breakdownSteps,
@@ -316,20 +337,22 @@ export function buildGeometryAnalysisDetails(params: Geometry3DParams): {
     };
   }
 
+  const primaryExplanation = `Busur dan juring mengambil porsi ${((cVal.centralAngleDeg / 360) * 100).toFixed(1)}% dari keliling dan luas lingkaran berjari-jari r = ${cVal.radius.toFixed(1)} cm.`;
+
   const breakdownSteps: GeometryBreakdownStep[] = [
     {
       step: 1,
       title: 'Hitung Panjang Busur (s)',
       latex: `s = \\frac{\\theta}{360^{\\circ}} \\cdot 2\\pi r = \\frac{${cVal.centralAngleDeg}^{\\circ}}{360^{\\circ}} \\cdot 2\\pi(${cVal.radius.toFixed(1)}) = ${cVal.arcLength.toFixed(2)}\\,\\text{cm}`,
       plainText: `s = ${cVal.arcLength.toFixed(2)} cm`,
-      simpleExplanation: `Panjang busur AB adalah porsi ${((cVal.centralAngleDeg / 360) * 100).toFixed(1)}% dari total keliling lingkaran (${cVal.circumference.toFixed(2)} cm).`,
+      simpleExplanation: `Panjang lengkung busur AB sebanding dengan rasio sudut pusat θ terhadap 360° dikalikan keliling (${cVal.circumference.toFixed(2)} cm).`,
     },
     {
       step: 2,
       title: 'Hitung Luas Juring (Sektor OAB)',
       latex: `L_{\\text{juring}} = \\frac{\\theta}{360^{\\circ}} \\cdot \\pi r^2 = \\frac{${cVal.centralAngleDeg}^{\\circ}}{360^{\\circ}} \\cdot \\pi(${cVal.radius.toFixed(1)})^2 = ${cVal.sectorArea.toFixed(2)}\\,\\text{cm}^2`,
       plainText: `L_juring = ${cVal.sectorArea.toFixed(2)} cm^2`,
-      simpleExplanation: `Luas sektor yang menyala pada cakram 3D sebanding langsung dengan besar sudut pusat θ = ${cVal.centralAngleDeg}°.`,
+      simpleExplanation: `Luas daerah sektor yang menyala dihitung dari porsi sudut pusat θ = ${cVal.centralAngleDeg}° terhadap luas lingkaran penuh.`,
     },
     {
       step: 3,
@@ -337,7 +360,7 @@ export function buildGeometryAnalysisDetails(params: Geometry3DParams): {
       latex: `\\alpha_{\\text{keliling}} = \\frac{1}{2}\\theta = ${cVal.inscribedAngleDeg.toFixed(1)}^{\\circ},\\;\\; c = 2r\\sin\\!\\left(\\frac{\\theta}{2}\\right) = ${cVal.chordLength.toFixed(2)}\\,\\text{cm}`,
       plainText: `Sudut keliling = ${cVal.inscribedAngleDeg.toFixed(1)}°, tali busur c = ${cVal.chordLength.toFixed(2)} cm`,
       simpleExplanation:
-        'Setiap sudut keliling yang menghadap busur yang sama selalu berukuran tepat setengah dari sudut pusatnya.',
+        'Sudut keliling selalu bernilai setengah dari sudut pusat yang menghadap busur yang sama, sementara tali busur dihitung lewat sinus setengah sudut.',
     },
     {
       step: 4,
@@ -345,29 +368,44 @@ export function buildGeometryAnalysisDetails(params: Geometry3DParams): {
       latex: `PT = \\sqrt{OP^2 - r^2} = \\sqrt{${cVal.externalDistance.toFixed(1)}^2 - ${cVal.radius.toFixed(1)}^2} = ${cVal.tangentLength.toFixed(2)}\\,\\text{cm}`,
       plainText: `PT = ${cVal.tangentLength.toFixed(2)} cm`,
       simpleExplanation:
-        'Karena garis singgung PT tegak lurus (90°) terhadap jari-jari OT, panjang PT dihitung eksak dengan Teorema Pythagoras pada ΔOTP.',
+        'Garis singgung PT membentuk sudut siku-siku 90° dengan jari-jari OT sehingga panjangnya diperoleh dari Teorema Pythagoras.',
     },
   ];
 
   const concepts: GeometryConceptItem[] = [
     {
-      id: 'arc-sector',
-      title: 'Rasio Sudut Pusat terhadap Keliling & Luas',
-      latex: `\\frac{\\theta}{360^{\\circ}} = \\frac{s}{2\\pi r} = \\frac{L_{\\text{juring}}}{\\pi r^2}`,
-      plainText: 'theta/360 = s/(2*pi*r) = L_juring/(pi*r^2)',
-      explanation: 'Busur dan juring selalu proporsional terhadap besar sudut pusat θ.',
+      id: 'arc-ratio',
+      title: 'Rumus Panjang Busur Lingkaran',
+      latex: `s = \\frac{\\theta}{360^{\\circ}} \\cdot 2\\pi r`,
+      plainText: 's = (theta / 360) * 2 * pi * r',
+      explanation: 'Menghitung panjang garis lengkung di tepi lingkaran berdasarkan besar sudut pusat θ.',
     },
     {
-      id: 'inscribed-tangent',
-      title: 'Teorema Sudut Keliling & Siku-siku Singgung',
-      latex: `\\theta_{\\text{keliling}} = \\frac{1}{2}\\theta_{\\text{pusat}},\\;\\; OT \\perp PT`,
-      plainText: 'theta_keliling = 1/2 theta_pusat, OT tegak lurus PT',
-      explanation: 'Garis singgung selalu memotong lingkaran di tepat satu titik dan tegak lurus jari-jari.',
+      id: 'sector-area',
+      title: 'Rumus Luas Juring (Sektor)',
+      latex: `L_{\\text{juring}} = \\frac{\\theta}{360^{\\circ}} \\cdot \\pi r^2`,
+      plainText: 'L_juring = (theta / 360) * pi * r^2',
+      explanation: 'Menentukan luas potongan daerah lingkaran yang dibatasi oleh dua jari-jari dan satu busur.',
+    },
+    {
+      id: 'inscribed-chord',
+      title: 'Sudut Keliling & Tali Busur',
+      latex: `\\theta_{\\text{keliling}} = \\frac{1}{2}\\theta_{\\text{pusat}},\\;\\; c = 2r\\sin\\!\\left(\\frac{\\theta}{2}\\right)`,
+      plainText: 'theta_keliling = 1/2 theta_pusat, c = 2r sin(theta/2)',
+      explanation: 'Sudut keliling berukuran setengah sudut pusatnya, sedangkan tali busur menghubungkan dua titik ujung busur secara lurus.',
+    },
+    {
+      id: 'tangent-pythagoras',
+      title: 'Garis Singgung Siku-siku (90°)',
+      latex: `OT \\perp PT,\\;\\; PT = \\sqrt{OP^2 - r^2}`,
+      plainText: 'OT tegak lurus PT, PT = sqrt(OP^2 - r^2)',
+      explanation: 'Garis singgung selalu tegak lurus terhadap jari-jari di titik singgung sehingga berlaku segitiga siku-siku Pythagoras.',
     },
   ];
 
   return {
     subMode: params.subMode,
+    primaryExplanation,
     transformValues: tVal,
     circleValues: cVal,
     breakdownSteps,
